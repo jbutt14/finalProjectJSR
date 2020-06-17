@@ -22,14 +22,27 @@ html, body {
     margin-bottom: 25px;
  }
 
+ h1 {
+    color: red;
+ }
+
  h2 {
      text-align: left;
  }
 
  p {
      text-align: left;
+     margin-bottom: 25px;
  }
 
  #weather_image {
-     border: 5px solid red;
+    background-color: lightblue;
  }
+
+ .leaflet-popup-content-wrapper {
+     border: red solid 3px;
+}
+
+.leaflet-popup-content {
+    color: blue;
+}

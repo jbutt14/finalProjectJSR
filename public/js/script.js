@@ -2,9 +2,7 @@
 //THIS IS VERY IMPORTANT... it creates a GLOBAL object, so that it can be used later (see success function)
 const locationData = {};
 
-// mapInit() //draw the map first when site loads
-
-//create map and show all markers from db
+//create map and show all markers from db ... IIFE
 (async function mapInit() {
   // set map default view to contiguous 48 states
   let map = L.map('map').setView(['39.5', '-98.35'], 4);
@@ -14,45 +12,52 @@ const locationData = {};
 
   //grab the data for displaying map markers (next)
   const url = '/show'
-  const data = await fetch(url) //follow the '/show' path... querying our own server
+  const data = await fetch(url) //grab data from mongoDB on '/show' path
   const locationData = await data.json() //convert the data into js
   console.log('database data received')
 
   // show markers based on db data
   for(let i=0; i < locationData.length; i++){    
+    //In the below line of code "parseFloat" turns our data strings into integers (our lat and lon are being stored as strings in db)
     L.marker([parseFloat(locationData[i].lat), parseFloat(locationData[i].lon)]).addTo(map)
-      .bindPopup(locationData[i].name)
+      .bindPopup(locationData[i].name) //set park name to what is displayed in pop up marker
       .on('click', onClick)
-    //In the above line of code "parseFloat" turns our data strings into integers (our lat and lon are being stored as strings in db)
   }
-
 })()
 
-//each time a marker is clicked return lat and long and send to OpenWeather API
+//each time a marker is clicked return lat and long, and send to OpenWeather API
 async function onClick(e) {
   let latitude = JSON.stringify(this.getLatLng().lat)
   let longitude = JSON.stringify(this.getLatLng().lng)
   let park = this.getPopup()._content; //capture park name
 
-  console.log(`${park} National Park Latitude: ${latitude} Longitude: ${longitude}`)
+  // console.log(`${park} National Park Latitude: ${latitude} Longitude: ${longitude}`) //verify clicked lat and lon
 
-  // const weatherAPI = process.env.WEATHERAPIKEY
-  let url = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=minutely,hourly&appid=34290148f37c39fd0ac4f3eda7ba674d`
-  
-  //----------------
-  //HIDE API KEY ONCE VERIFIED IT'S WORKING!!!!!!!!!
-  //----------------
+  weatherCall()
 
-  let res = await fetch(url)
-  let weatherData = await res.json()
-  console.log(weatherData);
+  async function weatherCall(){
+    const url = `weather/${latitude}/${longitude}`
+    const res = await fetch(url);
+    const weatherData = await res.json()
 
-  setWeatherData(weatherData, park)
+    setWeatherData(weatherData, park)
+  }
+
+  // let res = await fetch(url)
+  // let weatherData = await res.json() //grab data from openweathermap and convert to json
+
+  // setWeatherData(weatherData, park) //this function is going to set some HTML dependent on the clicked marker
 }
 
 function setWeatherData(weatherData, parkName){
-  let tempInF = (((weatherData.current.temp - 273.15) * 9/5) + 32).toFixed(1) //convert Kelvin to F
-  let feelsLike = (((weatherData.current.feels_like - 273.15) * 9/5) + 32).toFixed(1)
+  //function for converting temps from kelvin to Fahr
+  function convert(temp){
+    let fahr = ((temp - 273.15) * 9/5) + 32
+    return fahr
+  }
+  
+  let tempInF = convert(weatherData.current.temp).toFixed(1);
+  let feelsLike = convert(weatherData.current.feels_like).toFixed(1)
   let weatherIcon = weatherData.current.weather[0].icon;
 
   document.getElementById("park_name").innerHTML = `${parkName} National Park` ;
@@ -63,19 +68,5 @@ function setWeatherData(weatherData, parkName){
 
 }
 
-// calls location on server side
-// async function showWeather() {
-//     console.log('show weather clicked')
 
-//     const weatherAPI = process.env.WEATHERAPI
-//     let clickedLat = 
-//     let clickedLon = 
-
-//     let url = `https://api.openweathermap.org/data/2.5/onecall?lat=${clickedLat}&lon=${clickedLon}&
-//     exclude={part}&appid=${weatherAPI}`
-
-//     await fetch(url) 
-
-//     // console.log('add data done');
-// }
-
+ 
