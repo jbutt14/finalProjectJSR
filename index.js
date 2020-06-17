@@ -1,7 +1,8 @@
 //Express server setup
 const express = require('express');
 const app = express();
-const port = 4000;
+// const port = 4000;
+app.listen(process.env.PORT || 4000)
 //statis files are in 'public'
 app.use(express.static('public'))
 
