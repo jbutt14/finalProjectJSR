@@ -1,0 +1,35 @@
+html, body {
+    height: 100%;
+    
+ }
+
+ .mybody{
+    background: black;
+
+ }
+#myImg{
+    height: 30em;
+}
+
+.myjumbo{
+    margin-top: 5em;
+    text-align: center;
+    background-color: black;
+}
+
+#map { 
+    height: 40em;
+    margin-bottom: 25px;
+ }
+
+ h2 {
+     text-align: left;
+ }
+
+ p {
+     text-align: left;
+ }
+
+ #weather_image {
+     border: 5px solid red;
+ }
