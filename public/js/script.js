@@ -32,7 +32,7 @@ async function mapInit() {
 async function onClick(e) {
   let latitude = JSON.stringify(this.getLatLng().lat)
   let longitude = JSON.stringify(this.getLatLng().lng)
-  let park = this.getPopup()._content;
+  let park = this.getPopup()._content; //capture park name
 
   console.log(`${park} National Park Latitude: ${latitude} Longitude: ${longitude}`)
 
