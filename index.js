@@ -25,4 +25,4 @@ app.get('/show', async (req, res) => {
 })
 
 //Listen on port 4000
-app.listen(port, () => console.log(`National Parks Info App listening at http://localhost:${port}`))
+// app.listen(port, () => console.log(`National Parks Info App listening at http://localhost:${port}`))
