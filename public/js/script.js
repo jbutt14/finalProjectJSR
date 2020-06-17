@@ -27,28 +27,25 @@ const locationData = {};
 
 //each time a marker is clicked return lat and long, and send to OpenWeather API
 async function onClick(e) {
-  let latitude = JSON.stringify(this.getLatLng().lat)
-  let longitude = JSON.stringify(this.getLatLng().lng)
+  let latitude = JSON.stringify(this.getLatLng().lat) //grab lat from clicked marker
+  let longitude = JSON.stringify(this.getLatLng().lng) //grab lon from clicked marker
   let park = this.getPopup()._content; //capture park name
 
-  // console.log(`${park} National Park Latitude: ${latitude} Longitude: ${longitude}`) //verify clicked lat and lon
+  console.log(`${park} National Park Latitude: ${latitude} Longitude: ${longitude}`) //verify clicked lat and lon
 
   weatherCall()
 
+  //perform API call on server
   async function weatherCall(){
-    const url = `weather/${latitude}/${longitude}`
+    const url = `weather/${latitude}/${longitude}` //pass lat and long
     const res = await fetch(url);
     const weatherData = await res.json()
 
     setWeatherData(weatherData, park)
   }
-
-  // let res = await fetch(url)
-  // let weatherData = await res.json() //grab data from openweathermap and convert to json
-
-  // setWeatherData(weatherData, park) //this function is going to set some HTML dependent on the clicked marker
 }
 
+//set HTML items to weather content
 function setWeatherData(weatherData, parkName){
   //function for converting temps from kelvin to Fahr
   function convert(temp){
@@ -56,6 +53,7 @@ function setWeatherData(weatherData, parkName){
     return fahr
   }
   
+  //convert temps from K to F; load image name from weatherAPI
   let tempInF = convert(weatherData.current.temp).toFixed(1);
   let feelsLike = convert(weatherData.current.feels_like).toFixed(1)
   let weatherIcon = weatherData.current.weather[0].icon;
