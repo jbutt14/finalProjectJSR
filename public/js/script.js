@@ -2,10 +2,10 @@
 //THIS IS VERY IMPORTANT... it creates a GLOBAL object, so that it can be used later (see success function)
 const locationData = {};
 
-mapInit()
+// mapInit() //draw the map first when site loads
 
 //create map and show all markers from db
-async function mapInit() {
+(async function mapInit() {
   // set map default view to contiguous 48 states
   let map = L.map('map').setView(['39.5', '-98.35'], 4);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -26,7 +26,7 @@ async function mapInit() {
     //In the above line of code "parseFloat" turns our data strings into integers (our lat and lon are being stored as strings in db)
   }
 
-}
+})()
 
 //each time a marker is clicked return lat and long and send to OpenWeather API
 async function onClick(e) {
